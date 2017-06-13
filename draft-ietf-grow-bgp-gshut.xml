@@ -74,46 +74,32 @@
         <keyword>I-D</keyword>
         <keyword>Internet-Draft</keyword>
         <abstract>
-            <t>This draft describes operational procedures aimed at reducing the
-                amount of traffic lost during planned maintenances of routers or links,
-                involving the shutdown of BGP peering sessions.</t>
+            <t>
+                This draft describes operational procedures aimed at reducing the amount of traffic lost during planned maintenances of routers or links, involving the shutdown of BGP peering sessions.
+            </t>
         </abstract>
     </front>
     <middle>
         <section title="Introduction">
             <t>
-                Routing changes in BGP can be caused by planned, maintenance
-                operations. This document discusses operational procedures to be applied in
-                order to reduce or eliminate losses of packets during the maintenance.
-                These losses come from the transient lack of reachability during the BGP
-                convergence following the shutdown of an eBGP peering session between two
-                Autonomous System Border Routers (ASBR).
+                Routing changes in BGP can be caused by planned, maintenance operations.
+                This document discusses operational procedures to be applied in order to reduce or eliminate losses of packets during the maintenance.
+                These losses come from the transient lack of reachability during the BGP convergence following the shutdown of an eBGP peering session between two Autonomous System Border Routers (ASBR).
             </t>
             <t>
-                This document presents procedures for the cases where the
-                forwarding plane is impacted by the maintenance, hence when
-                the use of Graceful Restart does not apply.
+                This document presents procedures for the cases where the forwarding plane is impacted by the maintenance, hence when the use of Graceful Restart does not apply.
             </t>
             <t>
-                The procedures described in this document can be applied to reduce or
-                avoid packet loss for outbound and inbound traffic flows initially
-                forwarded along the peering link to be shut down.  These procedures
-                trigger, in both involved ASes, rerouting to the alternate path, while
-                allowing routers to keep using old paths until alternate ones are learned, installed
-                in the RIB and in the FIB.
-                This ensures that routers always have a valid route available during the
-                convergence process.
+                The procedures described in this document can be applied to reduce or avoid packet loss for outbound and inbound traffic flows initially forwarded along the peering link to be shut down.
+                These procedures trigger, in both involved ASes, rerouting to the alternate path, while allowing routers to keep using old paths until alternate ones are learned, installed in the RIB and in the FIB.
+                This ensures that routers always have a valid route available during the convergence process.
             </t>
             <t>
                 The goal of the document is to meet the requirements described in <xref target="RFC6198"/> at best, without changing the BGP protocol.
             </t>
             <t>
-                Still, it explains why reserving a community value for the
-                purpose of BGP session graceful shutdown would reduce the
-                management overhead bound with the solution. It would also
-                allow vendors to provide an automatic graceful shutdown
-                mechanism that does not require any router reconfiguration at
-                maintenance time.
+                Still, it explains why reserving a community value for the purpose of BGP session graceful shutdown would reduce the management overhead bound with the solution.
+                It would also allow vendors to provide an automatic graceful shutdown mechanism that does not require any router reconfiguration at maintenance time.
             </t>
             <t>
                 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL",
@@ -124,12 +110,10 @@
         </section>
         <section title="Terminology">
             <t>
-                g-shut initiator: a router on which the session shutdown
-                is performed for the maintenance.
+                g-shut initiator: a router on which the session shutdown is performed for the maintenance.
             </t>
-            <t> 
-                g-shut neighbor: a router that peers with the g-shut
-                initiator via (one of) the session(s) to be shut down.
+            <t>
+                g-shut neighbor: a router that peers with the g-shut initiator via (one of) the session(s) to be shut down.
             </t>
             <t>
                 Initiator AS: the Autonomous System of the g-shut initiator.
@@ -138,31 +122,21 @@
                 Neighbor AS: the Autonomous System of the g-shut neighbor.
             </t>
             <t>
-                Loss of Connectivity (LoC: the state when a router has
-                no path towards an affected prefix.
+                Loss of Connectivity (LoC: the state when a router has no path towards an affected prefix.
             </t>
         </section>
         <section title="Packet loss upon manual eBGP session shutdown" anchor="sec.loss">
             <t>
-                Packets can be lost during a manual shutdown of an eBGP
-                session for two reasons.
+                Packets can be lost during a manual shutdown of an eBGP session for two reasons.
             </t>
             <t>
-                First, routers involved in the convergence process can
-                transiently lack of paths towards an affected prefix, and drop
-                traffic destined to this prefix. This is because alternate
-                paths can be hidden by nodes of an AS. This happens when the
-                paths are not selected as best by the ASBR that receive them
-                on an eBGP session, or by Route Reflectors that do not
-                propagate them further in the iBGP topology because they do
-                not select them as best.
+                First, routers involved in the convergence process can transiently lack of paths towards an affected prefix, and drop traffic destined to this prefix.
+                This is because alternate paths can be hidden by nodes of an AS.
+                This happens when the paths are not selected as best by the ASBR that receive them on an eBGP session, or by Route Reflectors that do not propagate them further in the iBGP topology because they do not select them as best.
             </t>
             <t>
-                Second, within the AS, the FIB of routers can be transiently
-                inconsistent during the BGP convergence and packets towards
-                affected prefixes can loop and be dropped. Note that these
-                loops only happen when ASBR-to-ASBR encapsulation is not used
-                within the AS.
+                Second, within the AS, the FIB of routers can be transiently inconsistent during the BGP convergence and packets towards affected prefixes can loop and be dropped.
+                Note that these loops only happen when ASBR-to-ASBR encapsulation is not used within the AS.
             </t>
             <t>
                 This document only addresses the first reason.
@@ -170,32 +144,18 @@
         </section>
         <section title="Practices to avoid packet losses" anchor="sec.practices">
             <t>
-                This section describes means for an ISP to reduce the
-                transient loss of packets upon a manual shutdown of a BGP
-                session.
+                This section describes means for an ISP to reduce the transient loss of packets upon a manual shutdown of a BGP session.
             </t>
             <section title="Improving availability of alternate paths">
                 <t>
-                    All solutions that increase the availability of alternate
-                    BGP paths at routers performing packet lookups in BGP tables such as
-                    <xref target="I-D.ietf-idr-best-external"/> and <xref target="RFC7911"/> help
-                    in reducing the LoC bound with manual shutdown of eBGP
-                    sessions.
+                    All solutions that increase the availability of alternate BGP paths at routers performing packet lookups in BGP tables such as <xref target="I-D.ietf-idr-best-external"/> and <xref target="RFC7911"/> help in reducing the LoC bound with manual shutdown of eBGP sessions.
                 </t>
                 <t>
-                    One of such solutions increasing diversity in such a way that, at
-                    any single step of the convergence process following the
-                    eBGP session shutdown, a BGP router does not receive a
-                    message withdrawing the only path it currently knows for a
-                    given NLRI, allows for a simplified g-shut procedure.
+                    One of such solutions increasing diversity in such a way that, at any single step of the convergence process following the eBGP session shutdown, a BGP router does not receive a message withdrawing the only path it currently knows for a given NLRI, allows for a simplified g-shut procedure.
                 </t>
                 <t>
-                    Note that the LoC for the inbound traffic of the maintained router,
-                    induced by a lack of alternate path propagation within the iBGP topology
-                    of a neighboring AS is not under the control of the operator performing
-                    the maintenance. The part of the procedure aimed at avoiding LoC for
-                    incoming paths can thus be applied even if no LoC are expected for the
-                    outgoing paths.
+                    Note that the LoC for the inbound traffic of the maintained router, induced by a lack of alternate path propagation within the iBGP topology of a neighboring AS is not under the control of the operator performing the maintenance.
+                    The part of the procedure aimed at avoiding LoC for incoming paths can thus be applied even if no LoC are expected for the outgoing paths.
                 </t>
             </section>
             <!--Improving availability of alternate paths-->
@@ -204,10 +164,8 @@
                     This section describes configurations and actions to be performed for the graceful shutdown of eBGP peering links.
                 </t>
                 <t>
-                    The goal of this procedure is to let the paths being shutdown visible,
-                    but with a lower LOCAL_PREF value, while alternate paths spread through
-                    the iBGP topology. Instead of withdrawing the path, routers of an AS will
-                    keep on using it until they become aware of alternate paths.
+                    The goal of this procedure is to let the paths being shutdown visible, but with a lower LOCAL_PREF value, while alternate paths spread through the iBGP topology.
+                    Instead of withdrawing the path, routers of an AS will keep on using it until they become aware of alternate paths.
                 </t>
                 <section title="eBGP g-shut">
                     <section title="Pre-configuration" anchor="sec.summary.config">
@@ -220,28 +178,21 @@
                                 matches the g-shut community
                             </t>
                             <t>
-                                sets the LOCAL_PREF attribute of the paths tagged with the
-                                g-shut community to a low value
+                                sets the LOCAL_PREF attribute of the paths tagged with the g-shut community to a low value
                             </t>
                             <t>
                                 removes the g-shut community from the paths.
                             </t>
                             <t>
-                                optionally, adds an AS specific g-shut community on
-                                these paths to indicate that these are to be withdrawn
-                                soon.  If some ingress ASBRs reset the LOCAL_PREF
-                                attribute, this AS specific g-shut community will be
-                                used to override other LOCAL_PREF preference changes.
+                                optionally, adds an AS specific g-shut community on these paths to indicate that these are to be withdrawn soon.
+                                If some ingress ASBRs reset the LOCAL_PREF attribute, this AS specific g-shut community will be used to override other LOCAL_PREF preference changes.
                             </t>
                         </list>
                     </t>
                         <t>
-                            Note that in the case where an AS is aggregating multiple routes under
-                            a covering prefix, it is recommended to filter out the g-shut community
-                            from the resulting aggregate BGP route.  By doing so, the setting of the g-shut
-                            community on one of the aggregated routes will not let the entire
-                            aggregate inherit the community. Not doing so would let the entire
-                            aggregate undergo the g-shut behavior.
+                            Note that in the case where an AS is aggregating multiple routes under a covering prefix, it is recommended to filter out the g-shut community from the resulting aggregate BGP route.
+                            By doing so, the setting of the g-shut community on one of the aggregated routes will not let the entire aggregate inherit the community.
+                            Not doing so would let the entire aggregate undergo the g-shut behavior.
                         </t>
                     </section>
                     <section title="Operations at maintenance time" anchor="sec.summary.shut">
@@ -249,15 +200,11 @@
                             On the g-shut initiator, upon maintenance time, it is required to:
                         <list style="symbols">
                             <t>
-                                apply an outbound BGP route policy on the maintained eBGP
-                                session to tag the paths propagated over the session with
-                                the g-shut community.  This will trigger the BGP
-                                implementation to re-advertise all active routes previously
-                                advertised, and tag them with the g-shut community.
+                                apply an outbound BGP route policy on the maintained eBGP session to tag the paths propagated over the session with the g-shut community.
+                                This will trigger the BGP implementation to re-advertise all active routes previously advertised, and tag them with the g-shut community.
                             </t>
                             <t>
-                                apply an inbound BGP route policy on the maintained eBGP session to tag the
-                                paths received over the session with the g-shut community.
+                                apply an inbound BGP route policy on the maintained eBGP session to tag the paths received over the session with the g-shut community.
                             </t>
                             <t>
                                 wait for convergence to happen.
@@ -270,74 +217,47 @@
                     </section>
                     <section title="BGP implementation support for G-Shut">
                         <t>
-                            A BGP router implementation MAY provide features aimed at
-                            automating the application of the graceful shutdown procedures
-                            described above.
+                            A BGP router implementation MAY provide features aimed at automating the application of the graceful shutdown procedures described above.
                         </t>
                         <t>
-                            Upon a session shutdown specified as graceful by the
-                            operator, a BGP implementation supporting a g-shut feature SHOULD: 
+                            Upon a session shutdown specified as graceful by the operator, a BGP implementation supporting a g-shut feature SHOULD:
                         </t>
                         <t>
                             <list style="numbers" hangIndent="5">
                                 <t>
-                                    On the eBGP side, update all the paths propagated over the corresponding eBGP
-                                    session, tagging the GSHUT community to them. Any subsequent
-                                    update sent to the session being gracefully shut down would be
-                                    tagged with the GSHUT community.
+                                    On the eBGP side, update all the paths propagated over the corresponding eBGP session, tagging the GSHUT community to them.
+                                    Any subsequent update sent to the session being gracefully shut down would be tagged with the GSHUT community.
                                 </t>
                                 <t>
-                                    On the iBGP side, lower the LOCAL_PREF value of the paths received over the eBGP
-                                    session being shut down, upon their propagation over iBGP sessions.
+                                    On the iBGP side, lower the LOCAL_PREF value of the paths received over the eBGP session being shut down, upon their propagation over iBGP sessions.
                                     Optionally, also tag these paths with an AS specific g-shut community.
-                                    Note that alternatively, the LOCAL_PREF of the paths received over the
-                                    eBGP session can be lowered on the g-shut initiator itself, instead of
-                                    only when propagating over its iBGP sessions.
+                                    Note that alternatively, the LOCAL_PREF of the paths received over the eBGP session can be lowered on the g-shut initiator itself, instead of only when propagating over its iBGP sessions.
                                 </t>
                                 <t>
-                                    Optionally shut down the session after a configured
-                                    time.
+                                    Optionally shut down the session after a configured time.
                                 </t>
                                 <t>
-                                    Prevent the GSHUT community from being inherited by a path
-                                    that would aggregate some paths tagged with the GSHUT
-                                    community. This behavior avoids the GSHUT procedure to be
-                                    applied to the aggregate upon the graceful shutdown of one of
-                                    its covered prefixes.
+                                    Prevent the GSHUT community from being inherited by a path that would aggregate some paths tagged with the GSHUT community.
+                                    This behavior avoids the GSHUT procedure to be applied to the aggregate upon the graceful shutdown of one of its covered prefixes.
                                 </t>
                             </list>
                         </t>
                         <t>
-                            A BGP implementation supporting a g-shut feature SHOULD also automatically
-                            install the BGP policies that are supposed to be configured, as decribed in
-                            <xref target="sec.summary.config"/> for sessions over which g-shut
-                            is to be supported.
+                            A BGP implementation supporting a g-shut feature SHOULD also automatically install the BGP policies that are supposed to be configured, as decribed in <xref target="sec.summary.config"/> for sessions over which g-shut is to be supported.
                         </t>
                     </section>
                 </section>
                 <section title="iBGP g-shut">
                     <t>
-                        If the iBGP topology is viable after the
-                        maintenance of the session, i.e, if all BGP speakers
-                        of the AS have an iBGP signaling path for all prefixes
-                        advertised on this g-shut iBGP session, then the
-                        shutdown of an iBGP session does not lead to transient
-                        unreachability.
+                        If the iBGP topology is viable after the maintenance of the session, i.e, if all BGP speakers of the AS have an iBGP signaling path for all prefixes advertised on this g-shut iBGP session, then the shutdown of an iBGP session does not lead to transient unreachability.
                     </t>
                 </section>
                 <section title="Router g-shut">
                     <t>
-                        In the case of a shutdown of a router, a reconfiguration of the
-                        outbound BGP route policies of the g-shut initiator SHOULD be performed to
-                        set a low LOCAL_PREF value for the paths originated by the g-shut
-                        initiator (e.g, BGP aggregates redistributed from other protocols,
-                        including static routes).
+                        In the case of a shutdown of a router, a reconfiguration of the outbound BGP route policies of the g-shut initiator SHOULD be performed to set a low LOCAL_PREF value for the paths originated by the g-shut initiator (e.g, BGP aggregates redistributed from other protocols, including static routes).
                     </t>
                     <t>
-                        This behavior is equivalent to the recommended
-                        behavior for paths "redistributed" from eBGP sessions
-                        to iBGP sessions in the case of the shutdown of an
-                        ASBR.
+                        This behavior is equivalent to the recommended behavior for paths "redistributed" from eBGP sessions to iBGP sessions in the case of the shutdown of an ASBR.
                     </t>
                 </section>
             </section>
@@ -351,33 +271,19 @@
         </section>
         <section title="Link Up cases">
             <t>
-                We identify two potential causes for transient packet losses upon
-                an eBGP link up event. The first one is local to the g-no-shut initiator,
-                the second one is due to the BGP convergence following the injection of new
-                best paths within the iBGP topology.
+                We identify two potential causes for transient packet losses upon an eBGP link up event.
+                The first one is local to the g-no-shut initiator, the second one is due to the BGP convergence following the injection of new best paths within the iBGP topology.
             </t>
             <section title="Unreachability local to the ASBR">
                 <t>
-                    An ASBR that selects as best a path received over a newly
-                    brought up eBGP session may transiently drop traffic. This can
-                    typically happen when the nexthop attribute differs from the IP
-                    address of the eBGP peer, and the receiving ASBR has not yet
-                    resolved the MAC address associated with the IP address of that
-                    "third party" nexthop.
+                    An ASBR that selects as best a path received over a newly brought up eBGP session may transiently drop traffic.
+                    This can typically happen when the nexthop attribute differs from the IP address of the eBGP peer, and the receiving ASBR has not yet resolved the MAC address associated with the IP address of that "third party" nexthop.
                 </t>
                 <t>
-                    A BGP speaker implementation could avoid such losses by
-                    ensuring that "third party" nexthops are resolved before
-                    installing paths using these in the RIB.
+                    A BGP speaker implementation could avoid such losses by ensuring that "third party" nexthops are resolved before installing paths using these in the RIB.
                 </t>
                 <t>
-                    If the link up event corresponds to an eBGP session that is being manually
-                    brought up, over an already up multi-access link, then the
-                    operator can ping third party nexthops that are expected to be
-                    used before actually bringing the session up, or ping directed
-                    broadcast the subnet IP address of the link. By proceeding like
-                    this, the MAC addresses associated with these third party nexthops
-                    will be resolved by the g-no-shut initiator.
+                    If the link up event corresponds to an eBGP session that is being manually brought up, over an already up multi-access link, then the operator can ping third party nexthops that are expected to be used before actually bringing the session up, or ping directed broadcast the subnet IP address of the link. By proceeding like this, the MAC addresses associated with these third party nexthops will be resolved by the g-no-shut initiator.
                 </t>
             </section>
             <section title="iBGP convergence">
@@ -385,99 +291,69 @@
                     Corner cases leading to LoC can occur during an eBGP link up event.
                 </t>
                 <t>
-                    A typical example for such transient unreachability for a given
-                    prefix is the following:
+                    A typical example for such transient unreachability for a given prefix is the following:
                 </t>
                 <t>
-                    Let's consider 3 route reflectors RR1, RR2, RR3. There is a full mesh
-                    of iBGP session between them.
+                    Let's consider 3 route reflectors RR1, RR2, RR3. There is a full mesh of iBGP session between them.
                 </t>
                 <t>
                     <list style="empty" hangIndent="5">
                         <t>
-                            1. RR1 is initially advertising the
-                            current best path to the members of its iBGP RR
-                            full-mesh. It propagated that path within its RR
-                            full-mesh. RR2 knows only that path towards the prefix.
+                            1. RR1 is initially advertising the current best path to the members of its iBGP RR full-mesh.
+                            It propagated that path within its RR full-mesh.
+                            RR2 knows only that path towards the prefix.
                         </t>
                         <t>
-                            2. RR3 receives a new best path originated by the "g-no-shut"
-                            initiator, being one of its RR clients. RR3 selects it as best, and
-                            propagates an UPDATE within its RR full-mesh, i.e., to RR1 and RR2.
+                            2. RR3 receives a new best path originated by the "g-no-shut" initiator, being one of its RR clients.
+                            RR3 selects it as best, and propagates an UPDATE within its RR full-mesh, i.e., to RR1 and RR2.
                         </t>
                         <t>
-                            3. RR1 receives that path, reruns its decision process,
-                            and picks this new path as best. As a result, RR1 withdraws
-                            its previously announced best-path on the iBGP sessions of its RR full-mesh.
+                            3. RR1 receives that path, reruns its decision process, and picks this new path as best.
+                            As a result, RR1 withdraws its previously announced best-path on the iBGP sessions of its RR full-mesh.
                         </t>
                         <t>
-                            4. If, for any reason, RR3 processes the withdraw
-                            generated in step 3, before processing the update generated
-                            in step 2, RR3 transiently suffers from unreachability for
-                            the affected prefix.
+                            4. If, for any reason, RR3 processes the withdraw generated in step 3, before processing the update generated in step 2, RR3 transiently suffers from unreachability for the affected prefix.
                         </t>
                     </list>
                 </t>
                 <t>
-                    The use of <xref target="I-D.ietf-idr-best-external"/> among the RR of
-                    the iBGP full-mesh can solve these corner cases by ensuring
-                    that within an AS, the advertisement of a new route is not
-                    translated into the withdraw of a former route.
+                    The use of <xref target="I-D.ietf-idr-best-external"/> among the RR of the iBGP full-mesh can solve these corner cases by ensuring that within an AS, the advertisement of a new route is not translated into the withdraw of a former route.
                 </t>
                 <t>
-                    Indeed, "best-external" ensures that an ASBR does not
-                    withdraw a previously advertised (eBGP) path when it receives
-                    an additional, preferred path over an iBGP session. Also,
-                    "best-intra-cluster" ensures that a RR does not withdraw a
-                    previously advertised (iBGP) path to its non clients
-                    (e.g. other RRs in a mesh of RR) when it receives a new,
-                    preferred path over an iBGP session.
+                    Indeed, "best-external" ensures that an ASBR does not withdraw a previously advertised (eBGP) path when it receives an additional, preferred path over an iBGP session.
+                    Also, "best-intra-cluster" ensures that a RR does not withdraw a previously advertised (iBGP) path to its non clients (e.g. other RRs in a mesh of RR) when it receives a new, preferred path over an iBGP session.
                 </t>
             </section>
         </section>
         <section title="IANA assigned g-shut BGP community">
             <t>
-                Applying the g-shut procedure is rendered much easier with the use of a
-                single g-shut community value which could be used on all eBGP sessions, for
-                both inbound and outbound signaling.  The community value 0xFFFF0000 has been
-                assigned by IANA for this purpose.
+                Applying the g-shut procedure is rendered much easier with the use of a single g-shut community value which could be used on all eBGP sessions, for both inbound and outbound signaling.
+                The community value 0xFFFF0000 has been assigned by IANA for this purpose.
             </t>
             <t>
-                For Internet routes, a non transitive extended community will be reserved
-                from the pool defined in <xref target="I-D.ietf-idr-reserved-extended-communities"/>. Using such a community type allows
-                for not leaking graceful signaling out of the AS boundaries, without the need to explicitly
-                configure filters to strip the community off upon path propagation.
+                For Internet routes, a non transitive extended community will be reserved from the pool defined in <xref target="I-D.ietf-idr-reserved-extended-communities"/>.
+                Using such a community type allows for not leaking graceful signaling out of the AS boundaries, without the need to explicitly configure filters to strip the community off upon path propagation.
             </t>
         </section>
         <section title="Security Considerations">
             <t>
-                By providing the g-shut service to a neighboring AS, an ISP provides
-                means to this neighbor to lower the LOCAL_PREF value assigned to the paths
-                received from this neighbor.
+                By providing the g-shut service to a neighboring AS, an ISP provides means to this neighbor to lower the LOCAL_PREF value assigned to the paths received from this neighbor.
             </t>
             <t>
-                The neighbor could abuse the technique and do inbound traffic
-                engineering by declaring some prefixes as undergoing a maintenance so as to
-                switch traffic to another peering link.
+                The neighbor could abuse the technique and do inbound traffic engineering by declaring some prefixes as undergoing a maintenance so as to switch traffic to another peering link.
             </t>
             <t>
-                If this behavior is not tolerated by the ISP, it SHOULD monitor the use
-                of the g-shut community by this neighbor.
+                If this behavior is not tolerated by the ISP, it SHOULD monitor the use of the g-shut community by this neighbor.
             </t>
             <t>
-                ASes using the regular (transitive) g-shut community SHOULD remove the
-                community from neighboring ASes that do not support the g-shut procedure.
-                Doing so prevents malignant remote ASes from using the community through
-                intermediate ASes that do not support the feature, in order to perform
-                inbound traffic engineering. ASes using the non-transitive extended
-                community do not need to do this as the community is non transitive and
-                hence cannot be used by remote ASes.
+                ASes using the regular (transitive) g-shut community SHOULD remove the community from neighboring ASes that do not support the g-shut procedure.
+                Doing so prevents malignant remote ASes from using the community through intermediate ASes that do not support the feature, in order to perform inbound traffic engineering.
+                ASes using the non-transitive extended community do not need to do this as the community is non transitive and hence cannot be used by remote ASes.
             </t>
         </section>
         <section title="Acknowledgments">
             <t>
-                The authors wish to thank Olivier Bonaventure and Pradosh Mohapatra
-                for their useful comments on this work.
+                The authors wish to thank Olivier Bonaventure and Pradosh Mohapatra for their useful comments on this work.
             </t>
         </section>
     </middle>
@@ -491,39 +367,26 @@
         </references>
         <section title="Alternative techniques with limited applicability">
             <t>
-                A few alternative techniques have been considered to provide
-                g-shut capabilities but have been rejected due to their limited
-                applicability.  This section describe them for possible
-                reference.
+                A few alternative techniques have been considered to provide g-shut capabilities but have been rejected due to their limited
+                applicability.
+                This section describe them for possible reference.
             </t>
             <section title="Multi Exit Discriminator tweaking" anchor="sec.med-poison">
                 <t>
-                    The MED attribute of the paths to be avoided can be increased
-                    so as to force the routers in the neighboring AS to select other
-                    paths.
+                    The MED attribute of the paths to be avoided can be increased so as to force the routers in the neighboring AS to select other paths.
                 </t>
                 <t>
-                    The solution only works if the alternate paths are as good as
-                    the initial ones with respect to the Local-Pref value and the AS
-                    Path Length value.  In the other cases, increasing the MED value
-                    will not have an impact on the decision process of the routers in
-                    the neighboring AS.
+                    The solution only works if the alternate paths are as good as the initial ones with respect to the Local-Pref value and the AS Path Length value.
+                    In the other cases, increasing the MED value will not have an impact on the decision process of the routers in the neighboring AS.
                 </t>
             </section>
             <section title="IGP distance Poisoning" anchor="sec.igp-poison">
                 <t>
-                    The distance to the BGP nexthop corresponding to the
-                    maintained session can be increased in the IGP so that the old
-                    paths will be less preferred during the application of the IGP
-                    distance tie-break rule. However, this solution only works for the
-                    paths whose alternates are as good as the old paths with respect
-                    to their Local-Pref value, their AS Path length, and their MED
-                    value.
+                    The distance to the BGP nexthop corresponding to the maintained session can be increased in the IGP so that the old paths will be less preferred during the application of the IGP distance tie-break rule.
+                    However, this solution only works for the paths whose alternates are as good as the old paths with respect to their Local-Pref value, their AS Path length, and their MED value.
                 </t>
                 <t>
-                    Also, this poisoning cannot be applied when nexthop self is
-                    used as there is no nexthop specific to the maintained session to
-                    poison in the IGP.
+                    Also, this poisoning cannot be applied when nexthop self is used as there is no nexthop specific to the maintained session to poison in the IGP.
                 </t>
             </section>
         </section>
