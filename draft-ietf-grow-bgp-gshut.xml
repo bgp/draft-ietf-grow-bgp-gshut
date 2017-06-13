@@ -27,12 +27,12 @@
             </address>
         </author>
         <author surname="Decraene" initials="B." fullname="Bruno Decraene">
-            <organization>France Telecom</organization>
+            <organization>Orange</organization>
             <address>
                 <postal>
                     <street>38-40 rue du General Leclerc</street>
-                    <city>92794 Issy Moulineaux cedex 9</city>
-                    <code/>
+                    <city>Issy Moulineaux cedex 9</city>
+                    <code>92794</code>
                     <country>FR</country>
                 </postal>
                 <email>bruno.decraene@orange.com</email>
@@ -52,15 +52,9 @@
             </address>
         </author>
         <author surname="Patel" initials="P." fullname="Keyur Patel">
-            <organization>Cisco Systems</organization>
+            <organization>Arrcus, Inc.</organization>
             <address>
-                <postal>
-                    <street>   170 West Tasman Dr</street>
-                    <city>San Jose, CA</city>
-                    <code>95134</code>
-                    <country>US</country>
-                </postal>
-                <email>keyupate@cisco.com</email>
+                <email>keyur@arrcus.com</email>
             </address>
         </author>
         <author surname="Filsfils" initials="C." fullname="Clarence Filsfils">
